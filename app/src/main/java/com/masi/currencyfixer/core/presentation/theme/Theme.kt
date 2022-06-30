@@ -1,4 +1,4 @@
-package com.masi.currencyfixer.ui.theme
+package com.masi.currencyfixer.core.presentation.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
