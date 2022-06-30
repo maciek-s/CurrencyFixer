@@ -1,5 +1,7 @@
 package com.masi.currencyfixer.feature.currency_list.presentation
 
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -21,16 +23,12 @@ fun CurrencyListScreen(
 fun CurrencyListContent(
     state: CurrencyListState,
 ) {
-    Text(text = "Currency list")
-//    ScalingLazyColumn(
-//        modifier = Modifier.fillMaxSize(),
-//        state = listState
-//    ) {
-//        items(state.pages) { page ->
-//            PageChip(
-//                page = page,
-//                onClick = onClickPage
-//            )
-//        }
-//    }
+    LazyColumn {
+        items(state.timeseries) { item ->
+            Text(text = "Date: ${item.date}")
+            item.rates.forEach { rate ->
+                Text(text = "${rate.symbol} : ${rate.value}")
+            }
+        }
+    }
 }

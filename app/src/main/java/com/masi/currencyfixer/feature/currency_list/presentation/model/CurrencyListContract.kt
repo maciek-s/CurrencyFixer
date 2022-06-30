@@ -5,7 +5,8 @@ import com.masi.currencyfixer.core.presentation.model.Contract
 class CurrencyListContract : Contract {
 
     data class CurrencyListState(
-        val symbol: String = ""
+        val isLoading: Boolean = false,
+        val timeseries: List<TimeseriesDisplayable> = emptyList()
     ) : Contract.State
 
     sealed class CurrencyListIntent : Contract.Intent {
