@@ -1,6 +1,7 @@
 package com.masi.currencyfixer.feature.currency_list.presentation.components
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -15,11 +16,13 @@ fun DateHeader(
     date: String,
     modifier: Modifier = Modifier,
 ) {
-    Text(
-        text = stringResource(id = R.string.date_header, date),
-        modifier = modifier
-            .padding(all = LocalSpace.current.big),
-        fontSize = LocalTextSize.current.large,
-        fontWeight = FontWeight.Medium
-    )
+    Card {
+        Text(
+            text = stringResource(id = R.string.date_header, date),
+            modifier = modifier
+                .padding(all = LocalSpace.current.big),
+            fontSize = LocalTextSize.current.large,
+            fontWeight = FontWeight.Medium
+        )
+    }
 }

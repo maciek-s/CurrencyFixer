@@ -49,13 +49,19 @@ fun CurrencyListContent(
 ) {
     LazyColumn {
         state.historicalRates.forEach { item ->
-            item {
+            stickyHeader(
+                key = item.date,
+            ) {
                 DateHeader(
                     date = item.date,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                 )
             }
-            items(item.rates) { rate ->
+            items(
+                items = item.rates,
+                key = { "${item.date}/${it.symbol}" },
+            ) { rate ->
                 RateItem(
                     rate = rate,
                     modifier = Modifier.fillMaxWidth(),
