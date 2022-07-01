@@ -3,10 +3,10 @@ package com.masi.currencyfixer.feature.currency_details.presentation
 import androidx.lifecycle.viewModelScope
 import com.masi.currencyfixer.core.base.BaseViewModel
 import com.masi.currencyfixer.core.domain.model.SymbolWithDate
+import com.masi.currencyfixer.core.presentation.model.RateDisplayable
 import com.masi.currencyfixer.feature.currency_details.domain.usecase.GetRate
 import com.masi.currencyfixer.feature.currency_details.presentation.model.CurrencyDetailsContract.CurrencyDetailsIntent
 import com.masi.currencyfixer.feature.currency_details.presentation.model.CurrencyDetailsContract.CurrencyDetailsState
-import com.masi.currencyfixer.feature.currency_list.presentation.model.Rate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -27,16 +27,11 @@ class CurrencyDetailsViewModel @Inject constructor(
 
     private fun fetchRate(symbolWithDate: SymbolWithDate) {
         viewModelScope.launch {
-            try {
-                val rate = Rate(
-                    symbol = symbolWithDate.symbol,
-                    value = getRate(symbolWithDate),
-                )
-                _state.update { it.copy(date = symbolWithDate.date, rate = rate) }
-            } catch (e: Exception) {
-                // TODO handle error
-                e.printStackTrace()
-            }
+            val rate = RateDisplayable(
+                symbol = symbolWithDate.symbol,
+                value = getRate(symbolWithDate),
+            )
+            _state.update { it.copy(date = symbolWithDate.date, rate = rate) }
         }
     }
 

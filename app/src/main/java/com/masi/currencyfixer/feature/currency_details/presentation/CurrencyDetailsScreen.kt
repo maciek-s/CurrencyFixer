@@ -15,9 +15,9 @@ import com.masi.currencyfixer.R
 import com.masi.currencyfixer.core.domain.model.SymbolWithDate
 import com.masi.currencyfixer.core.presentation.theme.LocalSpace
 import com.masi.currencyfixer.core.presentation.theme.LocalTextSize
+import com.masi.currencyfixer.core.presentation.utils.extensions.formatted
 import com.masi.currencyfixer.feature.currency_details.presentation.model.CurrencyDetailsContract.CurrencyDetailsIntent
 import com.masi.currencyfixer.feature.currency_details.presentation.model.CurrencyDetailsContract.CurrencyDetailsState
-import com.masi.currencyfixer.feature.currency_list.presentation.components.formatValue
 
 @Composable
 fun CurrencyDetailsScreen(
@@ -50,7 +50,7 @@ fun CurrencyDetailsContent(
             fontSize = LocalTextSize.current.big,
         )
         Text(
-            text = "${state.rate.symbol} : ${state.rate.formatValue()}",
+            text = state.rate.formatted(),
             fontSize = LocalTextSize.current.big,
         )
     }

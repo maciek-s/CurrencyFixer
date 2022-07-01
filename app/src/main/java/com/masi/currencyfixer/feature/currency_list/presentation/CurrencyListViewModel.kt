@@ -3,6 +3,7 @@ package com.masi.currencyfixer.feature.currency_list.presentation
 import androidx.lifecycle.viewModelScope
 import com.masi.currencyfixer.core.base.BaseViewModel
 import com.masi.currencyfixer.core.domain.model.toHistoricalRatesDisplayable
+import com.masi.currencyfixer.feature.currency_list.domain.usecase.GetDayBefore
 import com.masi.currencyfixer.feature.currency_list.domain.usecase.GetHistoricalRates
 import com.masi.currencyfixer.feature.currency_list.presentation.model.CurrencyListContract.CurrencyListIntent
 import com.masi.currencyfixer.feature.currency_list.presentation.model.CurrencyListContract.CurrencyListState
@@ -15,6 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CurrencyListViewModel @Inject constructor(
     private val getHistoricalRates: GetHistoricalRates,
+    private val getDayBefore: GetDayBefore,
 ) : BaseViewModel<CurrencyListState, CurrencyListIntent>() {
 
     override val initialState: CurrencyListState = CurrencyListState()
@@ -26,7 +28,7 @@ class CurrencyListViewModel @Inject constructor(
     }
 
     private fun fetchHistoricalRates(
-        calendar: Calendar = Calendar.getInstance()
+        calendar: Calendar = lastHistoricalRatesCalendarDate ?: Calendar.getInstance()
     ) {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null) }
@@ -40,6 +42,7 @@ class CurrencyListViewModel @Inject constructor(
                 lastHistoricalRatesCalendarDate = calendar
             } catch (e: Exception) {
                 e.printStackTrace()
+                // TODO map error to message
                 _state.update { it.copy(error = e.cause?.toString() ?: "Unknown error") }
             } finally {
                 _state.update { it.copy(isLoading = false) }
@@ -58,7 +61,7 @@ class CurrencyListViewModel @Inject constructor(
         val lastDate = requireNotNull(lastHistoricalRatesCalendarDate) {
             "nextPage() was called but lastHistoricalRatesDate is null"
         }
-        val dayBefore = (lastDate.clone() as Calendar).apply { add(Calendar.DAY_OF_MONTH, -1) }
+        val dayBefore = getDayBefore(lastDate)
         fetchHistoricalRates(calendar = dayBefore)
     }
 
