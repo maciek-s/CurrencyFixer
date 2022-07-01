@@ -6,9 +6,12 @@ class CurrencyListContract : Contract {
 
     data class CurrencyListState(
         val isLoading: Boolean = false,
-        val timeseries: List<TimeseriesDisplayable> = emptyList()
+        val historicalRates: List<HistoricalRatesDisplayable> = emptyList(),
+        val error: String? = null,
     ) : Contract.State
 
     sealed class CurrencyListIntent : Contract.Intent {
+        object NextPage : CurrencyListIntent()
+        object Retry : CurrencyListIntent()
     }
 }

@@ -1,6 +1,6 @@
 package com.masi.currencyfixer.core.data.remote
 
-import com.masi.currencyfixer.core.data.remote.model.TimeseriesDto
+import com.masi.currencyfixer.core.data.remote.model.HistoricalRatesDto
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
@@ -12,16 +12,13 @@ class FixerApi @Inject constructor(
     private val httpClient: HttpClient
 ) {
 
-    suspend fun getTimeSeries(
-        startDate: String,
-        endDate: String,
+    suspend fun getHistoricalRates(
+        date: String,
         base: String = "EUR"
-    ): TimeseriesDto {
-        return httpClient.get("$BASE_URL/timeseries") {
+    ): HistoricalRatesDto {
+        return httpClient.get("$BASE_URL/$date") {
             addApiHeader()
             url {
-                parameters.append("start_date", startDate)
-                parameters.append("end_date", endDate)
                 parameters.append("base", base)
             }
         }.body()
