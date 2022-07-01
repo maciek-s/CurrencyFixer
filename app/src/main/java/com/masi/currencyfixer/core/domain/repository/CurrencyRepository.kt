@@ -8,4 +8,8 @@ interface CurrencyRepository {
     suspend fun getHistoricalRates(
         calendar: Calendar,
     ): HistoricalRates
+
+    suspend fun getHistoricalRates(
+        date: String,
+    ): HistoricalRates
 }

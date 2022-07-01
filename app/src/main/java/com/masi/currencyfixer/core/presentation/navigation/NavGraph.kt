@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.masi.currencyfixer.core.domain.model.SymbolWithDate
 import com.masi.currencyfixer.core.presentation.navigation.model.Screen
 import com.masi.currencyfixer.feature.currency_details.presentation.CurrencyDetailsScreen
 import com.masi.currencyfixer.feature.currency_details.presentation.CurrencyDetailsViewModel
@@ -40,7 +41,7 @@ private fun NavGraphBuilder.currencyList(
         CurrencyListScreen(
             viewModel = viewModel,
             onClickRate = {
-                navController.navigate(Screen.CurrencyDetails.withArgs(it.rate.symbol))
+                navController.navigate(Screen.CurrencyDetails.withArgs(it.symbol, it.date))
             }
         )
     }
@@ -48,16 +49,25 @@ private fun NavGraphBuilder.currencyList(
 
 private fun NavGraphBuilder.currencyDetails() {
     composable(
-        route = Screen.CurrencyDetails.route + "/{${Screen.CURRENCY_SYMBOL_KEY}}",
+        route = Screen.CurrencyDetails.route + "/{${Screen.CURRENCY_SYMBOL_KEY}}/{${Screen.CURRENCY_DATE_KEY}}",
         arguments = listOf(
-            navArgument(Screen.CURRENCY_SYMBOL_KEY) { type = NavType.StringType }
+            navArgument(Screen.CURRENCY_SYMBOL_KEY) { type = NavType.StringType },
+            navArgument(Screen.CURRENCY_DATE_KEY) { type = NavType.StringType }
         )
     ) { backStackEntry ->
         val arguments = requireNotNull(backStackEntry.arguments)
         val viewModel = hiltViewModel<CurrencyDetailsViewModel>()
 
+        val symbolWithDate = SymbolWithDate(
+            symbol = arguments.getString(Screen.CURRENCY_SYMBOL_KEY)
+                ?: throw IllegalStateException("Missing symbol argument"),
+            date = arguments.getString(Screen.CURRENCY_DATE_KEY)
+                ?: throw IllegalStateException("Missing date argument")
+        )
+
         CurrencyDetailsScreen(
             viewModel = viewModel,
+            symbolWithDate = symbolWithDate
         )
     }
 }

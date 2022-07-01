@@ -17,5 +17,6 @@ sealed class Screen(
 
     companion object {
         const val CURRENCY_SYMBOL_KEY = "currencySymbolKey"
+        const val CURRENCY_DATE_KEY = "currencyDateKey"
     }
 }

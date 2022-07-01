@@ -20,8 +20,12 @@ class CurrencyRepositoryImpl @Inject constructor(
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ROOT)
 
     override suspend fun getHistoricalRates(calendar: Calendar): HistoricalRates {
+        val date = dateFormat.format(calendar.time)
+        return getHistoricalRates(date)
+    }
+
+    override suspend fun getHistoricalRates(date: String): HistoricalRates {
         return withContext(Dispatchers.IO) {
-            val date = dateFormat.format(calendar.time)
             var local = historicalRatesDao.getHistoricalRates(date)
             if (local == null) {
                 val remote = fixerApi.getHistoricalRates(
