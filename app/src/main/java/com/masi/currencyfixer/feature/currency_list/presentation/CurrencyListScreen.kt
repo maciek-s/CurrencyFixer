@@ -19,10 +19,12 @@ import com.masi.currencyfixer.feature.currency_list.presentation.components.Date
 import com.masi.currencyfixer.feature.currency_list.presentation.components.RateItem
 import com.masi.currencyfixer.feature.currency_list.presentation.model.CurrencyListContract.CurrencyListIntent
 import com.masi.currencyfixer.feature.currency_list.presentation.model.CurrencyListContract.CurrencyListState
+import com.masi.currencyfixer.feature.currency_list.presentation.model.RateWithDate
 
 @Composable
 fun CurrencyListScreen(
     viewModel: CurrencyListViewModel,
+    onClickRate: (RateWithDate) -> Unit = {}
 ) {
     val state by viewModel.state.collectAsState()
 
@@ -33,7 +35,8 @@ fun CurrencyListScreen(
         },
         onClickRetry = {
             viewModel.onTriggerIntent(CurrencyListIntent.Retry)
-        }
+        },
+        onClickRate = onClickRate
     )
 }
 
@@ -42,6 +45,7 @@ fun CurrencyListContent(
     state: CurrencyListState,
     onScrollToBottom: () -> Unit = {},
     onClickRetry: () -> Unit = {},
+    onClickRate: (RateWithDate) -> Unit = {},
 ) {
     LazyColumn {
         state.historicalRates.forEach { item ->
@@ -54,7 +58,14 @@ fun CurrencyListContent(
             items(item.rates) { rate ->
                 RateItem(
                     rate = rate,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    onClickRate = {
+                        val rateWithDate = RateWithDate(
+                            rate = it,
+                            date = item.date
+                        )
+                        onClickRate(rateWithDate)
+                    }
                 )
             }
         }

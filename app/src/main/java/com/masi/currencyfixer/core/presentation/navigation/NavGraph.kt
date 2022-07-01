@@ -39,6 +39,9 @@ private fun NavGraphBuilder.currencyList(
 
         CurrencyListScreen(
             viewModel = viewModel,
+            onClickRate = {
+                navController.navigate(Screen.CurrencyDetails.withArgs(it.rate.symbol))
+            }
         )
     }
 }
