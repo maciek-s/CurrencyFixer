@@ -16,7 +16,7 @@ object HttpClientModule {
 
     @Singleton
     @Provides
-    fun provideHttpClientModule(): HttpClient {
+    fun provideHttpClient(): HttpClient {
         return HttpClient(CIO) {
             install(ContentNegotiation) {
                 json()

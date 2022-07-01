@@ -6,6 +6,6 @@ import java.util.*
 interface CurrencyRepository {
 
     suspend fun getHistoricalRates(
-        date: Calendar,
+        calendar: Calendar,
     ): HistoricalRates
 }

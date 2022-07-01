@@ -12,8 +12,8 @@ class GetHistoricalRates @Inject constructor(
 ) {
 
     suspend operator fun invoke(
-        date: Calendar
+        calendar: Calendar
     ): HistoricalRates {
-        return currencyRepository.getHistoricalRates(date)
+        return currencyRepository.getHistoricalRates(calendar)
     }
 }

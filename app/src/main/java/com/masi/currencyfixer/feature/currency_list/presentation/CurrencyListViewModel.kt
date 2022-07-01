@@ -19,25 +19,25 @@ class CurrencyListViewModel @Inject constructor(
 
     override val initialState: CurrencyListState = CurrencyListState()
 
-    private var lastHistoricalRatesDate: Calendar? = null
+    private var lastHistoricalRatesCalendarDate: Calendar? = null
 
     init {
         fetchHistoricalRates()
     }
 
     private fun fetchHistoricalRates(
-        date: Calendar = Calendar.getInstance()
+        calendar: Calendar = Calendar.getInstance()
     ) {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null) }
             try {
-                val historicalRates = getHistoricalRates(date).toHistoricalRatesDisplayable()
+                val historicalRates = getHistoricalRates(calendar).toHistoricalRatesDisplayable()
                 _state.update { state ->
                     val current = state.historicalRates.toMutableList()
                     current.add(historicalRates)
                     state.copy(historicalRates = current)
                 }
-                lastHistoricalRatesDate = date
+                lastHistoricalRatesCalendarDate = calendar
             } catch (e: Exception) {
                 e.printStackTrace()
                 _state.update { it.copy(error = e.cause?.toString() ?: "Unknown error") }
@@ -55,11 +55,11 @@ class CurrencyListViewModel @Inject constructor(
     }
 
     private fun nextPage() {
-        val lastDate = requireNotNull(lastHistoricalRatesDate) {
+        val lastDate = requireNotNull(lastHistoricalRatesCalendarDate) {
             "nextPage() was called but lastHistoricalRatesDate is null"
         }
         val dayBefore = (lastDate.clone() as Calendar).apply { add(Calendar.DAY_OF_MONTH, -1) }
-        fetchHistoricalRates(date = dayBefore)
+        fetchHistoricalRates(calendar = dayBefore)
     }
 
     private fun retry() {

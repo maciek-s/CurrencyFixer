@@ -1,5 +1,6 @@
 package com.masi.currencyfixer.core.domain.model
 
+import com.masi.currencyfixer.core.data.local.model.HistoricalRatesEntity
 import com.masi.currencyfixer.core.data.remote.model.HistoricalRatesDto
 import com.masi.currencyfixer.feature.currency_list.presentation.model.HistoricalRatesDisplayable
 import com.masi.currencyfixer.feature.currency_list.presentation.model.Rate
@@ -11,9 +12,14 @@ data class HistoricalRates(
 
 // Mappers
 
-fun HistoricalRatesDto.toHistoricalRates() = HistoricalRates(
+fun HistoricalRatesDto.toHistoricalRatesEntity() = HistoricalRatesEntity(
     date = date,
     rates = rates
+)
+
+fun HistoricalRatesEntity.toHistoricalRates() = HistoricalRates(
+    date = date,
+    rates = rates,
 )
 
 fun HistoricalRates.toHistoricalRatesDisplayable() = HistoricalRatesDisplayable(
